@@ -22,7 +22,7 @@ int main(int argc, const char * argv[]) {
     
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::normal_distribution gd{0.0,0.1};
+    std::normal_distribution<double> gd{0.0,0.1};
     
     std::uniform_real_distribution<double>urd(0,1);
     for(int i=0;i<10;i++){
