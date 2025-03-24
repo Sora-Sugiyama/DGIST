@@ -3,6 +3,7 @@
 //  CSE302
 //
 //  Created by Sora Sugiyama on 3/18/25.
+//  Modified the code of https://stackoverflow.com/questions/2654480/writing-bmp-image-in-pure-c-c-without-other-libraries Answer by Morgoth and deusmacbre
 //
 
 #ifndef bmp_writer_h
@@ -91,6 +92,7 @@ public:
         bmpinfoheader[10] = (u8)(       h>>16);
         bmpinfoheader[11] = (u8)(       h>>24);
         
+        if(path.back()!='/')path.push_back('/');
         f = fopen((path+filename).c_str(),"wb");
         fwrite(bmpfileheader,1,14,f);
         fwrite(bmpinfoheader,1,40,f);
