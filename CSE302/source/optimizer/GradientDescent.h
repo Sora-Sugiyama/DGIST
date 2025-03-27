@@ -13,6 +13,7 @@
 #include <cstddef>
 #include <iostream>
 #include <stack>
+#include <cmath>
 
 namespace optimizer{
 
@@ -33,13 +34,13 @@ class DAct
                       linAlge::mat &Y,
                       const double theta,
                       u32 gn=10000,const u32 &printCur=1<<30){
-    
+
     u32 i=0,ii=0,jj=0;
-    
+
     for(i=1;i<=gn;i++){
         std::stack<linAlge::mat>log;
         linAlge::mat x=X;
-        
+
         // Forward Prop
         for(linAlge::mat &w:coef){
             log.push(x);
@@ -49,26 +50,28 @@ class DAct
             }
         }
 
+        if((i-1)%printCur==0){
+            std::cout<<"End of "<<i-1<<"th step ; loss: "<<loss(x,Y)<<std::endl;
+        }
+
         x=dloss(x,Y);
         for(ii=0;ii<x.n;ii++){
             for(jj=0;jj<x.m;jj++){
-                x(ii,jj)=dactf(x(ii,jj));
+                x(ii,jj)*=dactf(x(ii,jj));
             }
         }
-        
-        if((i+1)%printCur==0){
-            std::cout<<"Before the "<<i<<"th step, Current loss: "<<loss(x,Y)<<std::endl;
-        }
-        
+
+
         // Backward Prop
         for(auto it=coef.rbegin();it!=coef.rend();it++){
             linAlge::mat Z=log.top().T();log.pop();
             linAlge::mat &w=*it;
             x=Z*x;
+
             for(ii=0;ii<x.n;ii++){
                 for(jj=0;jj<x.m;jj++){
-                    x(ii,jj)=dactf(x(ii,jj));
                     w(ii,jj)-=theta*x(ii,jj);
+                    x(ii,jj)*=dactf(x(ii,jj));
                 }
             }
         }
