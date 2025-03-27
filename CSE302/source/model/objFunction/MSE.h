@@ -21,7 +21,7 @@ using u32=uint_fast32_t;
 double MSE(linAlge::mat &h,linAlge::mat &y){
     u32 i,j;
     double ret=0,tmp=0;
-    
+
     assert(("Size of h and y is must be equal.\n"&&(h.n==y.n&&h.m==y.m)));
     for(j=0;j<h.m;j++){
         tmp=0;
@@ -30,12 +30,12 @@ double MSE(linAlge::mat &h,linAlge::mat &y){
         }
         ret+=tmp/double(h.n);
     }
-    
+
     return ret;
 }
 
 template<class Act>
-double calcMSE(linAlge::mat &X,std::vector<linAlge::mat>&W,linAlge::mat &y,Act actf){
+double calcMSE(linAlge::mat X,std::vector<linAlge::mat>&W,linAlge::mat &y,Act actf){
     u32 i,j;
     for(linAlge::mat &w:W){
         X=X*w;
@@ -43,6 +43,7 @@ double calcMSE(linAlge::mat &X,std::vector<linAlge::mat>&W,linAlge::mat &y,Act a
             for(j=0;j<X.m;j++)X(i,j)=actf(X(i,j));
         }
     }
+
     return MSE(X,y);
 }
 
@@ -51,7 +52,7 @@ linAlge::mat dMSE(linAlge::mat &h,linAlge::mat &y){
     linAlge::mat ret(h.n,h.m);
     for(i=0;i<h.n;i++){
         for(j=0;j<h.m;j++){
-            ret(i,j)=2*(h(i,j)-y(i,j));
+            ret(i,j)=2*(h(i,j)-y(i,j))/double(h.n);
         }
     }
     return ret;
