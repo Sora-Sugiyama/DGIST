@@ -9,7 +9,7 @@
 #define L1L2_h
 
 #include <cmath>
-#include "matrix.h"
+#include "../../linAlge/matrix.h"
 
 namespace model{
 
