@@ -19,8 +19,8 @@
 
 namespace MNIST{
 
-using u8=u_int8_t;
-using u32=u_int32_t;
+using u8=uint_fast8_t;
+using u32=uint_fast32_t;
 using mpix=std::vector<char>;
 
 namespace{
@@ -36,30 +36,30 @@ std::vector<std::pair<mpix,u32> >readMNIST(const std::string img_path,const std:
     std::ifstream img_file(img_path.c_str(),std::ios::in|std::ios::binary);
     std::ifstream lab_file(lab_path.c_str(),std::ios::in|std::ios::binary);
     u32 magic=0,n_img=0,n_lab=0,r=0,c=0;
-    
+
     img_file.read(reinterpret_cast<char*>(&magic),4);
     swap_endian(magic);
     assert(("Incorrect image file magic number.\n"&&magic==2051));
-    
+
     lab_file.read(reinterpret_cast<char*>(&magic),4);
     swap_endian(magic);
     assert(("Incorrect label file magic number.\n"&&magic==2049));
-    
+
     img_file.read(reinterpret_cast<char*>(&n_img),4);
     swap_endian(n_img);
     lab_file.read(reinterpret_cast<char*>(&n_lab),4);
     swap_endian(n_lab);
     assert(("The number of image and the number label are must be same.\n"&&n_img==n_lab));
     if(n0==-1)n0=n_img;
-    
+
     img_file.read(reinterpret_cast<char*>(&r),4);
     swap_endian(r);
     img_file.read(reinterpret_cast<char*>(&c),4);
     swap_endian(c);
-    
-    
+
+
     std::vector<std::pair<mpix,u32> >ret(n0);
-    
+
     for(u32 i=0;i<n0;i++){
         mpix &pixels=ret[i].first;
         char lab='0';
@@ -68,10 +68,10 @@ std::vector<std::pair<mpix,u32> >readMNIST(const std::string img_path,const std:
         lab_file.read(&lab,1);
         ret[i].second=u32(lab);
     }
-    
+
     img_file.close();
     lab_file.close();
-    
+
     return ret;
 }
 
