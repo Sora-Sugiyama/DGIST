@@ -19,7 +19,7 @@
 
 namespace BMP{
 
-using u8=u_int8_t;
+using u8=uint_fast8_t;
 
 class lum{
     std::vector<std::vector<u8> > _vuc;
@@ -32,7 +32,7 @@ public:
     ~lum(){
         n=m=0;
     }
-    
+
     u8& operator()(size_t i,size_t j){
         return _vuc[i][j];
     }
@@ -45,12 +45,12 @@ u8 bmppad[3] = {0,0,0};
 class bmp{
 public:
     lum red,green,blue;
-    
+
     bmp(size_t N=0,size_t M=0){
         red=green=blue=lum(N,M);
     }
     ~bmp(){}
-    
+
     void init(lum &R,lum &G,lum &B){
         assert(("All size of matrices must be same.\n"&&
                 R.n==G.n&&G.n==B.n&&
@@ -59,16 +59,16 @@ public:
         green=G;
         blue=B;
     }
-    
+
     void writeBMP(std::string path,std::string filename){
         FILE *f;
         u8 *img=NULL;
         size_t w=red.n,h=red.m;
         size_t filesize=54 + 3*h*w;
-        
+
         img=(u8*)malloc(3*h*w);
         memset(img,0,3*h*w);
-        
+
         for(size_t i=0;i<w;i++){
             for(size_t j=0;j<h;j++){
                 size_t x=i,y=h-j-1;
@@ -77,12 +77,12 @@ public:
                 img[(x+y*w)*3+0]=blue(i,j);
             }
         }
-        
+
         bmpfileheader[ 2] = (u8)(filesize    );
         bmpfileheader[ 3] = (u8)(filesize>> 8);
         bmpfileheader[ 4] = (u8)(filesize>>16);
         bmpfileheader[ 5] = (u8)(filesize>>24);
-        
+
         bmpinfoheader[ 4] = (u8)(       w    );
         bmpinfoheader[ 5] = (u8)(       w>> 8);
         bmpinfoheader[ 6] = (u8)(       w>>16);
@@ -91,7 +91,7 @@ public:
         bmpinfoheader[ 9] = (u8)(       h>> 8);
         bmpinfoheader[10] = (u8)(       h>>16);
         bmpinfoheader[11] = (u8)(       h>>24);
-        
+
         if(path.back()!='/')path.push_back('/');
         f = fopen((path+filename).c_str(),"wb");
         fwrite(bmpfileheader,1,14,f);
@@ -101,7 +101,7 @@ public:
             fwrite(img+(w*(h-i-1)*3),3,w,f);
             fwrite(bmppad,1,(4-(w*3)%4)%4,f);
         }
-        
+
         free(img);
         fclose(f);
     }
