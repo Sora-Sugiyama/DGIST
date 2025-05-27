@@ -1,4 +1,5 @@
 class TwoFourTree():
+
     class _Node:
         """Lightweight, nonpublic class for storing a node."""
         __slots__ = '_parent', '_keys', '_children' # streamline memory usage
@@ -13,10 +14,10 @@ class TwoFourTree():
         self._root = None
         self._size = 0
     
-    # _split begin
+    # begin _split
     def _split(self,x):
     
-        assert  len(x._keys) == 4,"Wrong call - Overflow did not occurred.\n"
+        if len(x._keys) < 4:return True
         
         a, b, c, d          =   x._keys
         aa, bb, cc, dd, ee  =   x._children
@@ -43,11 +44,13 @@ class TwoFourTree():
                                         xParent._children[insertPosition+1:]
                                     )
             x = None
-            
-    # _split end
+
+        return False
+        
+    # end _split
         
     
-    # search begin
+    # begin search
     def search(self, element):
     
         x = self._root
@@ -95,17 +98,17 @@ class TwoFourTree():
         
         return None,None
             
-    # search end
+    # end search
     
-    
+
+    # begin _findInsertPosition
     def _findInsertPosition(self, element):
     
-        x       =   self._root
-        prev    =   None
+        x = self._root
         
-        if x == None    :   return  True, None, None
-        prev = None
-        while x != None and x:
+        if x == None    :   return  True, None
+        
+        while x._children[0] != None :
             
             match len(x._keys):
             
@@ -115,15 +118,15 @@ class TwoFourTree():
                     
                     if      element < a :   x = x._children[0]
                     elif    element > a :   x = x._children[1]
-                    else                :   return  False, x, 0
+                    else                :   return  False, x
                     
                     
                 case 2:
                 
                     a, b    =   x._keys
                     
-                    if      element == a:   return  False, x,0
-                    elif    element == b:   return  False, x,1
+                    if      element == a:   return  False, x
+                    elif    element == b:   return  False, x
                     
                     
                     if      element < a :   x = x._children[0]
@@ -135,9 +138,9 @@ class TwoFourTree():
                 
                     a, b, c =   x._keys
                     
-                    if      element == a:   return  False, x,0
-                    elif    element == b:   return  False, x,1
-                    elif    element == c:   return  False, x,2
+                    if      element == a:   return  False, x
+                    elif    element == b:   return  False, x
+                    elif    element == c:   return  False, x
                         
                     if      element < a :   x = x._children[0]
                     elif    element < b :   x = x._children[1]
@@ -146,13 +149,92 @@ class TwoFourTree():
         
         
         
-        return True,None,prev
-    
-    def insert(self, element):
-        ## IMPLEMENT HERE
+        return True, x
+    # end _findInsertPosition
 
+    
+    # begin insert
+    def insert(self, element):
+
+        needInsert, x = self._findInsertPosition(element)
+
+        if not needInsert: return
+
+        if x == None:
+            x = self._Node(None, [element], [None, None])
+            self._size += 1
+            
+            return
+
+
+        insertPosition = 0
+
+        # begin match
+        match len(x._keys):
+        
+            case 1:
+                
+                a   =   x._keys[0]
+                
+                if      element < a :   insertPosition = 0
+                elif    element > a :   insertPosition = 1
+                else                :   return
+                    
+                    
+            case 2:
+                
+                a, b    =   x._keys
+                
+                if      element == a:   return
+                elif    element == b:   return
+                
+                
+                if      element < a :   insertPosition = 0
+                elif    element < b :   insertPosition = 1
+                else                :   insertPosition = 2
+                    
+                    
+            case 3:
+            
+                a, b, c =   x._keys
+                
+                if      element == a:   return  False, x
+                elif    element == b:   return  False, x
+                elif    element == c:   return  False, x
+                    
+                if      element < a :   insertPosition = 0
+                elif    element < b :   insertPosition = 1
+                elif    element < c :   insertPosition = 2
+                else                :   insertPosition = 3
+        
+        # end match
+
+        self._size += 1
+        x._keys     = (
+                            x._keys[:insertPosition] +
+                            [element] +
+                            x._keys[insertPosition:]
+                        )
+                                    
+        x._children = (
+                            x._children[:insertPosition] +
+                            [None, None] +
+                            x._children[insertPosition+1:]
+                        )
+
+        while x != None:
+            if self._split(x): break
+            x = x._parent
+            
+    # end insert
+        
     def delete(self, element):
-        ## IMPLEMENT HERE
+
+        x, index = self.search(element)
+
+        if node == None:return
+
+        
 
     def display(self):
         self._display(self._root, 0)
