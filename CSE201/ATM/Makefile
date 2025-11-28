@@ -1,5 +1,7 @@
+# if you fail to compile, use gnu++23
+
 CXXFLAGS := -std=gnu++20 -O2 -Wall
-OBJS := main.o ATM.o
+OBJS := main.o
 CXX := g++
 all: exe
 
@@ -10,4 +12,3 @@ exe: $(OBJS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 main: main.o
-ATM: ATM.o
