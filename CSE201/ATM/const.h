@@ -13,11 +13,11 @@
 using u64=uint64_t;
 using str=std::string;
 
-inline constexpr u64 krw50k=0,krw10k=1,krw5k=2,krw1k=3;
-inline constexpr size_t MAX_ARRAY_LENGTH=0b1111111111111111;
-inline constexpr u64 LIMIT_BILL_TRANSACTION=0xffff,LIMIT_CHECK_TRANSACTION=0xff;
-inline constexpr std::string_view part="----------------------------------------";
-inline constexpr std::string_view kor="\
+constexpr u64 krw50k=0,krw10k=1,krw5k=2,krw1k=3;
+constexpr size_t MAX_ARRAY_LENGTH=0b1111111111111111;
+constexpr u64 LIMIT_BILL_TRANSACTION=0xffff,LIMIT_CHECK_TRANSACTION=0xff;
+constexpr std::string_view part="----------------------------------------";
+constexpr std::string_view kor="\
 환영\n\
 시작 하려면, 제발 너의 직불 카드를 삽입하라.\n\
 [1] 카드 삽입\n\
@@ -28,7 +28,7 @@ inline constexpr std::string_view kor="\
 [6] 홈\n\
 ";
 
-inline constexpr std::string_view eng="\
+constexpr std::string_view eng="\
 Welcome\n\
 To start, please insert your debit card\n\
 [1] Card Insert\n\
@@ -41,7 +41,7 @@ To start, please insert your debit card\n\
 
 
 
-inline constexpr std::string_view helpPage="\
+constexpr std::string_view helpPage="\
 help: open help page\n\
 ls <options>:\n\
     list all ATMs that satisfy options.\n\
@@ -53,7 +53,7 @@ slc <ATM-serial-number>: select ATM\n\
 exit: exit\n\
 ";
 
-inline constexpr std::string_view lsHelpr="\
+constexpr std::string_view lsHelpr="\
 ------------------------------------\n\
  Primary Bank Name: {:<}\n\
               Type: {:<}\n\
@@ -61,7 +61,7 @@ inline constexpr std::string_view lsHelpr="\
      Serial Number: {:<}\n\
 ------------------------------------\n";
 
-inline constexpr std::string_view blackboxHelp1="\
+constexpr std::string_view blackboxHelp1="\
 ------------------------------------\n\
  Primary Bank Name: {:<}\n\
               Type: {:<}\n\
@@ -70,7 +70,7 @@ inline constexpr std::string_view blackboxHelp1="\
     Remaining Cash: KRW50k {:<d}; KRW10k {:<d}; KRW5k {:<d}; KRW1k {:<d}\n\
 ------------------------------------\n";
 
-inline constexpr std::string_view blackboxHelp2="\
+constexpr std::string_view blackboxHelp2="\
 ------------------------------------\n\
          Bank Name: {:<}\n\
     Account Number: {:<}\n\
@@ -78,7 +78,7 @@ inline constexpr std::string_view blackboxHelp2="\
            Balance: {:<d}\n\
 ------------------------------------\n";
 
-inline constexpr std::string_view TS_HELP="\
+constexpr std::string_view TS_HELP="\
            CARD NUMBER: {:<}\n\
                ACCOUNT: {:<}\n\
         TRANSACTION ID: {:<d}\n\
@@ -87,7 +87,7 @@ inline constexpr std::string_view TS_HELP="\
                    FEE: {:<d}\n\
 ";
 
-inline constexpr std::string_view TS_HELP_KR="\
+constexpr std::string_view TS_HELP_KR="\
                카드 번호: {:<}\n\
                    계좌: {:<}\n\
                거래 번호: {:<d}\n\
@@ -96,7 +96,7 @@ inline constexpr std::string_view TS_HELP_KR="\
                  수수료: {:<d}\n\
 ";
 
-inline constexpr std::string_view TS_HELP_TRANSFER="\
+constexpr std::string_view TS_HELP_TRANSFER="\
            CARD NUMBER: {:<}\n\
         TRANSACTION ID: {:<d}\n\
       TRANSACTION TYPE: TRANSFER\n\
@@ -107,7 +107,7 @@ inline constexpr std::string_view TS_HELP_TRANSFER="\
    DESTINATION ACCOUNT: {:<}\n\
 ";
 
-inline constexpr std::string_view TS_HELP_TRANSFER_KR="\
+constexpr std::string_view TS_HELP_TRANSFER_KR="\
                카드 번호: {:<}\n\
                거래 번호: {:<d}\n\
                거래 유형: 이체\n\
@@ -118,7 +118,7 @@ inline constexpr std::string_view TS_HELP_TRANSFER_KR="\
                받는 사람: {:<}\n\
 ";
 
-inline const u64 commandMapper(const str &cmd){
+const u64 commandMapper(const str &cmd){
     if(cmd=="help")return 0;
     else if(cmd=="ls")return 1;
     else if(cmd=="slc")return 2;
