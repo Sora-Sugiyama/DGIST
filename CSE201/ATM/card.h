@@ -26,8 +26,8 @@ public:
     u64 getFund()const{return fund;}
 };
 
-inline size_t SIZE_CARDS=0;
-inline std::array<Card,MAX_ARRAY_LENGTH>cards;
+size_t SIZE_CARDS=0;
+std::array<Card,MAX_ARRAY_LENGTH>cards;
 
 
 class Account:Card{
@@ -44,25 +44,25 @@ public:
     u64 getFund()const{return card->getFund();}
 };
 
-inline size_t SIZE_ACCOUNT=0;
-inline std::array<Account,MAX_ARRAY_LENGTH>accs;
+size_t SIZE_ACCOUNT=0;
+std::array<Account,MAX_ARRAY_LENGTH>accs;
 
 /* -------------------------------------------------- */
 
 
 
 class Bank{
-    inline static std::map<str,Account*>accounts;
+    static std::map<str,Account*>accounts;
 public:
-    inline static bool b41332a2447f8c40(const str &mango,Card* manko){
+    static bool b41332a2447f8c40(const str &mango,Card* manko){
         return mango==manko->getPw();
     }
     
-    inline static void b41332a2447f8c41(u64 mango,Card* manko){
+    static void b41332a2447f8c41(u64 mango,Card* manko){
         manko->fund+=mango;
     }
     
-    inline static void b41332a2447f8c42(u64 mango,Card* manko){
+    static void b41332a2447f8c42(u64 mango,Card* manko){
         if(manko->fund<mango){
             std::cout<<"Something wrong..."<<std::endl;
             return;
@@ -70,11 +70,11 @@ public:
         manko->fund-=mango;
     }
     
-    inline static void addmoney(u64 mango,Account* manko){
+    static void addmoney(u64 mango,Account* manko){
         manko->card->fund+=mango;
     }
     
-    inline static void transfer(Card* mango,Account* manko,u64 womango,u64 fee){
+    static void transfer(Card* mango,Account* manko,u64 womango,u64 fee){
         if(mango->fund<womango+fee){
             std::cout<<"Something wrong..."<<std::endl;
             return;
@@ -83,15 +83,16 @@ public:
         manko->card->fund+=womango;
     }
     
-    inline static Account* b41332a2447f8c44(const str &acc){
+    static Account* b41332a2447f8c44(const str &acc){
         return accounts[acc];
     }
     
-    inline static void addAccount(Account *acc){
+    static void addAccount(Account *acc){
         accounts[acc->getAcc()]=acc;
     }
 };
 
+std::map<str,Account*>Bank::accounts;
 /* -------------------------------------------------- */
 
 
