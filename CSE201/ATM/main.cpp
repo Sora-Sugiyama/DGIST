@@ -18,7 +18,7 @@
 #include "include.h"
 #include "card.h"
 #include "const.h"
-#include "ATM.hpp"
+#include "ATM.h"
 
 // Do not use this.
 namespace weekSecure{
