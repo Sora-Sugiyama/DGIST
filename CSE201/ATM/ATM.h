@@ -123,7 +123,8 @@ bool ATM::WITHDRAWAL(Card *banana,const u64 amount,const bool lang,std::stringst
     blueberry-=n5*5000;
     n1=std::min(fund.N1K(),blueberry/1000);
     blueberry-=n1*1000;
-    if(blueberry>0){
+    
+    if(n50+n10+n5+n1>50||blueberry>0){
         std::cout<<(lang?"ATM에 지폐 부족":"Insufficient bill in the ATM")<<std::endl;
         return false;
     }

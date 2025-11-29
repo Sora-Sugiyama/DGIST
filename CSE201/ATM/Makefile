@@ -1,5 +1,3 @@
-# if you fail to compile, use gnu++23
-
 CXXFLAGS := -std=gnu++20 -O2 -Wall
 OBJS := main.o
 CXX := g++

@@ -15,7 +15,7 @@ using str=std::string;
 
 constexpr u64 krw50k=0,krw10k=1,krw5k=2,krw1k=3;
 constexpr size_t MAX_ARRAY_LENGTH=0b1111111111111111;
-constexpr u64 LIMIT_BILL_TRANSACTION=0xffff,LIMIT_CHECK_TRANSACTION=0xff;
+constexpr u64 LIMIT_BILL_TRANSACTION=50,LIMIT_CHECK_TRANSACTION=50;
 constexpr std::string_view part="----------------------------------------";
 constexpr std::string_view kor="\
 환영\n\
