@@ -106,6 +106,21 @@ void displayTransactionHistroy(ATM& atm,bool lang){
     fout<<(lang?atm.exportTS_KR():atm.exportTS_EN())<<std::flush;
 }
 
+void adminMenu(ATM& atm,bool lang){
+    loop:{
+        std::cout<<(lang?"[1] 거래 내역 표시\n[2] 세션 종료\n>":"[1] Display Transaction History\n[2] Terminate Session\n>")<<std::flush;
+        str cmd;
+        std::getline(std::cin,cmd);
+        if(blackbox(cmd))goto loop;
+        if(cmd=="1"){
+            displayTransactionHistroy(atm, lang);
+        }else if(cmd=="2"){
+            return;
+        }
+    }
+    goto loop;
+}
+
 Card* insertCard(ATM& atm,str& cardnum,bool banana){
     SESSION_NUM++;
     std::cout<<"START SESSION "<<SESSION_NUM<<std::endl;
@@ -120,12 +135,17 @@ Card* insertCard(ATM& atm,str& cardnum,bool banana){
             std::cout<<(banana?"비밀번호 입력: ":"Enter the password: ")<<std::flush;
             std::getline(std::cin,in);
             if(blackbox(in))goto input011;
-            if(weekSecure::hash(pw)!=weekSecure::hash(in)){
+            if(pw!=weekSecure::hash(in)){
                 if(CHANCE)std::cout<<(banana?"잘못된 비밀번호. 다시 시도하라.":"Wrong password. Try again.")<<std::endl;
                 else{
                     std::cout<<(banana?"잘못된 비밀번호":"Wrong password.")<<std::endl;
                     return nullptr;
                 }
+            }else{
+                adminMenu(atm,banana);
+                std::cout<<"SESSION SUMMARY - YOU ARE ADMIN\n";
+                std::cout<<"SESSION "<<SESSION_NUM<<" TERMINATED"<<std::endl;
+                return nullptr;
             }
         }
         return nullptr;
@@ -149,9 +169,10 @@ Card* insertCard(ATM& atm,str& cardnum,bool banana){
 }
 
 void startATM(ATM& atm){
+    bool lang=false;
     start:{
         std::cout<<"ATM "<<atm.getSerial()<<std::endl;
-        bool lang=false,cardInserted=false;
+        bool cardInserted=false;
         if(atm.isBi()){
             std::cout<<(lang?"만약 언어를 바꾸고 싶다면, 입력 \"x\"":"If you want to change language, enter \"x\"")<<std::endl;
         }
@@ -172,10 +193,16 @@ void startATM(ATM& atm){
             
             if(cmd=="x")lang^=1;
             else if(cmd=="1"){
+                
+                if(cardInserted){
+                    std::cout<<(lang?"세션을 먼저 종료하라":"Terminate your session first.")<<std::endl;
+                    goto loop;
+                }
+                
                 str cardNum;
                 
                 input002:
-                std::cout<<"Enter your card number: "<<std::flush;
+                std::cout<<(lang?"카드 번호 입력: ":"Enter your card number: ")<<std::flush;
                 
                 std::getline(std::cin,cardNum);
                 if(blackbox(cardNum))goto input002;
@@ -313,12 +340,16 @@ Account Number: {:<}\n\
                             goto loop;
                         }
                     }
+                    if(bill[0]+bill[1]+bill[2]+bill[3]>LIMIT_BILL_TRANSACTION){
+                        std::cout<<(lang?"너무 많은 지폐":"Too many bills")<<std::endl;
+                    }
                     amount=bill[0]*50000+bill[1]*10000+bill[2]*5000+bill[3]*1000;
                 }else if(OPTION=="2"){
                     str AMOUNT;
                     input008:
                     std::cout<<(lang?"이체 금액:":"Transfer amount: ")<<std::flush;
                     std::getline(std::cin,AMOUNT);
+                    
                     if(blackbox(AMOUNT))goto input008;
                     
                     try{
@@ -331,13 +362,13 @@ Account Number: {:<}\n\
                 
                 str ACCOUNT;
                 input009:
-                std::cout<<"Receiving Account: "<<std::flush;
+                std::cout<<(lang?"받는 사람 계좌: ":"Receiving Account: ")<<std::flush;
                 std::getline(std::cin,ACCOUNT);
                 if(blackbox(ACCOUNT))goto input009;
                 u64 fee=0;
                 Account* account=Bank::b41332a2447f8c44(ACCOUNT);
                 if(account==nullptr){
-                    std::cout<<"SOMETHING WRONG"<<std::endl;
+                    std::cout<<(lang?"계좌 없음: ":"No account: ")<<ACCOUNT<<std::endl;
                     goto loop;
                 }
                 if(OPTION=="1"){
@@ -377,9 +408,9 @@ Account Number: {:<}\n\
                 }
                 std::cout<<fun.str()<<std::flush;
                 if(lang){
-                    std::cout<<std::format("잔고: {:d}\n카드를 챙겨라",ic->getFund())<<std::endl;
+                    std::cout<<std::format("잔고: {:d}\n카드를 챙겨라\n",ic->getFund())<<part<<std::endl;
                 }else{
-                    std::cout<<std::format("Funds: {:d}\nyour card.",ic->getFund())<<std::endl;
+                    std::cout<<std::format("Funds: {:d}\nTake your card.\n",ic->getFund())<<part<<std::endl;
                 }
                 goto start;
             }else if(cmd=="6"){
