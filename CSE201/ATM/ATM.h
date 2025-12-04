@@ -42,7 +42,7 @@ public:
     static bool VERIFY_PASSWORD(Card* bananana,const bool lang);
     bool DEPOSIT(Card *banana,const std::array<u64,4>&bill,const u64 check,const bool lang,std::stringstream &orange);
     bool WITHDRAWAL(Card *banana,const u64 amount,const bool lang,std::stringstream &orange);
-    bool TRANSFER(bool bycash,Card *x,Account *y,const u64 amount,const u64 fee,const bool lang,std::stringstream &orange);
+    bool TRANSFER(bool bycash,Card *x,Account *y,const std::array<u64,4>&bill,const u64 amount,const u64 fee,const bool lang,std::stringstream &orange);
     
     const u64 N50k(){return fund.N50K();}
     const u64 N10k(){return fund.N10K();}
@@ -142,12 +142,13 @@ bool ATM::WITHDRAWAL(Card *banana,const u64 amount,const bool lang,std::stringst
     return true;
 }
 
-bool ATM::TRANSFER(bool bycash, Card *x,Account *y,const u64 amount,const u64 fee,const bool lang,std::stringstream &orange){
+bool ATM::TRANSFER(bool bycash, Card *x,Account *y,const std::array<u64,4>&bill,const u64 amount,const u64 fee,const bool lang,std::stringstream &orange){
     if(!bycash&&amount+fee>x->getFund()){
         std::cout<<(lang?"잔액 부족":"Insufficient Balance")<<std::endl;
         return false;
     }
     if(bycash){
+        for(size_t i=0;i<4;i++)fund.bill[i]+=bill[i];
         Bank::addmoney(amount, y);
     }else{
         Bank::transfer(x, y, amount, fee);
