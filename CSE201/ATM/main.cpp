@@ -318,7 +318,7 @@ Account Number: {:<}\n\
                 std::cout<<(lang?"[1] 현금\n[2] 계좌":"[1] Cash\n[2] Account")<<std::endl;
                 std::getline(std::cin,OPTION);
                 if(blackbox(OPTION))goto input006;
-                
+                std::array<u64,4>bill={};
                 u64 amount=0;
                 if(OPTION=="1"){
                     
@@ -331,7 +331,7 @@ Account Number: {:<}\n\
                     if(blackbox(BILLS))goto input007;
                     
                     std::stringstream ssBILL(BILLS);
-                    std::array<u64,4>bill={};
+                    
                     for(int i=0;i<4;i++){
                         try{
                             ssBILL>>bill[i];
@@ -395,7 +395,7 @@ Account Number: {:<}\n\
                         }
                     }
                 }
-                atm.TRANSFER(OPTION=="1", ic, account, amount, fee, lang, fun);
+                atm.TRANSFER(OPTION=="1", ic, account, bill, amount, fee, lang, fun);
             }else if(cmd=="5"){
                 if(!cardInserted){
                     std::cout<<(lang?"카드를 먼저 삽입하라":"Insert your card first.")<<std::endl;
